@@ -5,16 +5,14 @@ dersom den finnes så skal program returnere indeks for første tegn av pattern 
 */
 public class PatternMatching {
     public static void main(String[] args) {
-        PatternMatching patternMatching = new PatternMatching();
-        String str = ""; // Text to be searched
-        String pattern = ""; // Pattern to search for
+        String str;
+        String pattern;
         Scanner input = new Scanner(System.in);
 
         System.out.println("- Skriv inn til programmet -\n");
         System.out.print("str: ");
         str = input.nextLine();
         pattern = input.nextLine();
-
-        
     }
+
 }
