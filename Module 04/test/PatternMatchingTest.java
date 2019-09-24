@@ -1,17 +1,16 @@
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 class PatternMatchingTest {
     PatternMatching patternMatching = new PatternMatching();
 
-    @Test
-    public void test_something(){
-
-        assertThat(patternMatching.matching("Dette er en test", "test"), is("Lol"));
+    @ParameterizedTest
+    @CsvFileSource(resources = "PatternMatchingExamples.csv", delimiter = '~')
+    void testIndexesOfKnownStrings(String str, String pattern, int expected) {
+        assertEquals(patternMatching.findPatternInString(str, pattern), expected);
     }
 
 }

@@ -4,6 +4,7 @@ dersom den finnes så skal program returnere indeks for første tegn av pattern 
 */
 class PatternMatching {
 
+
     /**
      * Finds a pattern in a given string
      *
@@ -11,14 +12,13 @@ class PatternMatching {
      * @param pattern The pattern to search for in str
      * @return The index of first char of pattern, if not found: -1
      */
-    private int findPatternInString(String str, String pattern) {
+     int findPatternInString(String str, String pattern) {
         int index = -1;
         for (int i = 0, k = 0; i < str.length(); i++) {
-            System.out.printf("%s:%s i=%s\n", k, str.charAt(i), i);
             if (str.charAt(i) == pattern.charAt(k)) {
                 k++;
                 if (k == pattern.length()) {
-                    index = i - k + 1;
+                    index = i - k + 1; // +1 because zero-indexing
                     break;
                 }
             } else {
