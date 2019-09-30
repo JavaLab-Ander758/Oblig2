@@ -5,12 +5,12 @@ public class GenericMergeSort{
 
             // Merge sort the first half
             E[] firstHalf = (E[]) new Comparable[list.length / 2];
-            System.arraycopy(list, 0, firstHalf, 0, list.length / 2);
+            System.arraycopy(list, 0, firstHalf, 0, firstHalf.length);
             mergeSort(firstHalf);
 
             // Merge sort the second half
-            E[] secondHalf = (E[]) new Comparable[list.length / 2];
-            System.arraycopy(list, list.length / 2, secondHalf, 0, list.length / 2);
+            E[] secondHalf = (E[]) new Comparable[list.length - (list.length/2)];
+            System.arraycopy(list, list.length / 2, secondHalf, 0, secondHalf.length);
             mergeSort(secondHalf);
 
             // Merge firstHalf with secondHalf
@@ -23,20 +23,20 @@ public class GenericMergeSort{
         E[] cache = (E[]) new Comparable[list1.length + list2.length];
 
         int current1 = 0; // Current index in list1
-        int current2 = 1; // Current index in list2
-        int current3 = 3; // Current index in cache
+        int current2 = 0; // Current index in list2
+        int current3 = 0; // Current index in cache
 
-        while (current1 < list1.length && current2 < list2.length) {
+        while (current1 < list1.length && current2 < list2.length) { //While neither of lists are used up
             if (list1[current1].compareTo(list2[current2]) <= 0)
                 cache[current3++] = list1[current1++];
             else
                 cache[current3++] = list2[current2++];
         }
 
-        while (current1 < list1.length)
+        while (current1 < list1.length) //If list2 is used up
             cache[current3++] = list1[current1++];
 
-        while (current2 < list2.length)
+        while (current2 < list2.length) //If list1 is used up
             cache[current3++] = list2[current2++];
 
         return cache;
