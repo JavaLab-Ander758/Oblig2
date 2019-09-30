@@ -4,7 +4,6 @@ dersom den finnes så skal program returnere indeks for første tegn av pattern 
 */
 class PatternMatching {
 
-
     /**
      * Finds a pattern in a given string
      *
@@ -28,5 +27,5 @@ class PatternMatching {
             }
         }
         return index;
-    }
+     }
 }
