@@ -19,6 +19,14 @@ public class GenericMergeSort{
         }
     }
 
+    /**
+     * Merges the two lists together into one list
+     *
+     * @param list1 First half to merge
+     * @param list2 Second half to merge
+     * @param <E> The generic
+     * @return The new merged list
+     */
     public static <E extends Comparable<E>> E[] merge(E[] list1, E[] list2) {
         E[] cache = (E[]) new Comparable[list1.length + list2.length];
 
