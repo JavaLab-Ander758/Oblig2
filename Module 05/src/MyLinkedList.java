@@ -161,13 +161,17 @@ public class MyLinkedList<E> implements MyList<E> {
         head = tail = null;
     }
 
+    // TODO: implement method
     /** Return true if this list contains the element e */
     @Override
     public boolean contains(Object e) {
         // Left as an exercise
         return true;
+
+        // Return false if list !contain e
     }
 
+    // TODO: implement method
     /** Return the element at the specified index */
     @Override
     public E get(int index) {
@@ -175,6 +179,7 @@ public class MyLinkedList<E> implements MyList<E> {
         return null;
     }
 
+    // TODO: implement method
     /**
      * Return the index of the head matching element in
      * this list. Return - 1 if no match.
@@ -185,6 +190,7 @@ public class MyLinkedList<E> implements MyList<E> {
         return 0;
     }
 
+    // TODO: implement method
     /**
      * Return the index of the last matching element in
      * this list. Return - 1 if no match.
@@ -195,6 +201,7 @@ public class MyLinkedList<E> implements MyList<E> {
         return 0;
     }
 
+    // TODO: implement method
     /**
      * Replace the element at the specified position
      * in this list with the specified element.
