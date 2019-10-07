@@ -2,87 +2,105 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MyLinkedListTest {
+
     //<editor-fold desc="Method test: contains(Object e)">
     @Test
-    void containsReturnsTrueIfObjectExists() {
+    void contains_ReturnsTrueIfObjectExists() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        String stringToAdd = "Los Angeles";
-        String stringToFind = "Los Angeles";
-        myLinkedList.add(stringToAdd);
-        assertTrue(myLinkedList.contains(stringToFind));
-        // Returns true as of 7. Oct 17:45 due to method not implemented yet..
+        myLinkedList.add("Los Angeles");
+        assertTrue(myLinkedList.contains("Los Angeles"));
     }
     @Test
-    void containsReturnsFalseIfObjectDoesNotExist() {
+    void contains_ReturnsFalseIfListIsEmptyANDifElementIsNotInList() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        String test = "This String does not exist in MyLinkedList";
-        assertFalse(myLinkedList.contains(test));
+        myLinkedList.add("One");
+        assertFalse(myLinkedList.contains("Two"));
     }
     //</editor-fold>
 
     //<editor-fold desc="Method test: get(int index)">
     @Test
-    void getReturnsCorrectElementAtGivenIndex() {
+    void get_ReturnsCorrectElementAtGivenIndex() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        String firstString = "First element";
-        String secondsString = "Second element";
-        myLinkedList.add(firstString);
-        myLinkedList.add(secondsString);
-        assertThat(myLinkedList.get(1), equalTo(secondsString));
+        myLinkedList.add("First element");
+        myLinkedList.add("Second element");
+        assertThat(myLinkedList.get(1), equalTo("Second element"));
     }
     @Test
-    void getReturnsNullIFElementDoesNotExists() {
+    void get_ThrowsExceptionIfIndexIsOutOfBoundsOfList() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        assertThat(myLinkedList.get(0), equalTo(null));
+        // Check if correct message is thrown
+        IndexOutOfBoundsException thrown =
+                assertThrows(IndexOutOfBoundsException.class,
+                        () -> myLinkedList.get(0),
+                        "Expected get(0) to throw, but it didn't");
+        assertTrue(thrown.getMessage().contains("Index '0' is out of bounds of list!"));
     }
     //</editor-fold>
 
     //<editor-fold desc="Method test: indexOf(Object e)">
     @Test
-    void indexOfReturnsCorrectIndexOfGivenElement() {
+    void indexOf_ReturnsCorrectIndexOfGivenElement() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        String firstString = "First element";
-        String secondString = "Second element";
-        myLinkedList.add(firstString);
-        myLinkedList.add(secondString);
-        assertThat(myLinkedList.indexOf(secondString), equalTo(1));
+        myLinkedList.add("First element");
+        myLinkedList.add("Second element");
+        assertThat(myLinkedList.indexOf("Second element"), equalTo(1));
     }
     @Test
-    void indexOfReturnsErrorValueIfElementDoesNotExist() {
+    void indexOf_ReturnsErrorValueIfElementIsNotInList() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        String test = "This String does not exist in MyLinkedList";
-        assertThat(myLinkedList.indexOf(test), equalTo(-1));
+        myLinkedList.add("First element");
+        myLinkedList.add("Second element");
+        assertThat(myLinkedList.indexOf("Third element"), equalTo(-1));
     }
     //</editor-fold>
 
     //<editor-fold desc="Method test: lastIndexOf(E e)">
     @Test
-    void lastIndexOfReturnsCorrectIndexOfElement() {
+    void lastIndexOf_ReturnsCorrectIndexOfElement() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        String firstString = "Anders";
-        String secondString = "Alexander";
-        String thirdString = "Alexander";
-        myLinkedList.add(firstString);
-        myLinkedList.add(secondString);
-        myLinkedList.add(thirdString);
-        assertThat(myLinkedList.lastIndexOf(thirdString), equalTo(2));
+        myLinkedList.add("Anders");
+        myLinkedList.add("Alexander");
+        myLinkedList.add("Alexander");
+        assertThat(myLinkedList.lastIndexOf("Alexander"), equalTo(2));
     }
     @Test
-    void lastIndexOfReturnsErrorValueIfElementNotInList() {
+    void lastIndexOf_ReturnsErrorValueIfElementNotInList() {
         MyLinkedList myLinkedList = new MyLinkedList();
-        String test = "This String does not exist in MyLinkedList";
-        assertThat(myLinkedList.lastIndexOf(test), equalTo(-1));
+        myLinkedList.add("Anders");
+        myLinkedList.add("Is");
+        assertThat(myLinkedList.lastIndexOf("Awesome"), equalTo(-1));
     }
     //</editor-fold>
 
     //<editor-fold desc="Method test: set(int index, E e)">
-    // TODO: add test for method: 'set'
+    @Test
+    void set_newElementWasSuccessfullySetInGivenIndex() {
+        MyLinkedList myLinkedList = new MyLinkedList();
+        myLinkedList.add("Anders");
+        myLinkedList.add("is");
+        myLinkedList.add("dumb...");
+        myLinkedList.set(2, "smart!");
+        assertThat(myLinkedList.get(2), equalTo("smart!"));
+    }
+    @Test
+    void set_returnsPreviousElementOnSuccess() {
+        MyLinkedList myLinkedList = new MyLinkedList();
+        myLinkedList.add("Ferrari");
+        assertThat(myLinkedList.set(0, "Ferrari2"), equalTo("Ferrari"));
+    }
+    @Test
+    void set_ThrowsExceptionIfIndexIsOutOfBoundsOfList() {
+        MyLinkedList myLinkedList = new MyLinkedList();
+        // Check if correct message is thrown
+        IndexOutOfBoundsException thrown =
+                assertThrows(IndexOutOfBoundsException.class,
+                        () -> myLinkedList.set(5, "testing"),
+                        "Expected set(5) to throw, but it didn't");
+        assertTrue(thrown.getMessage().contains("Index '5' is out of bounds of list!"));
+    }
     //</editor-fold>
-
-
-
 }

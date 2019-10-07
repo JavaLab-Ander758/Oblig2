@@ -161,55 +161,87 @@ public class MyLinkedList<E> implements MyList<E> {
         head = tail = null;
     }
 
-    // TODO: implement method
     /** Return true if this list contains the element e */
     @Override
     public boolean contains(Object e) {
-        // Left as an exercise
-        return true;
+        // Return false if list is empty
+        if (size == 0)
+            return false;
 
-        // Return false if list !contain e
+        // Iterate list to find e in list
+        Node<E> current = head;
+        for (int i = 0; i < size; i++) {
+            if (e.equals(current.element)) // Check for match
+                return true;
+            current = current.next; // Go to next node
+        }
+        return false; // false if list !contain e
     }
 
-    // TODO: implement method
     /** Return the element at the specified index */
     @Override
     public E get(int index) {
-        // Left as an exercise
-        return null;
+        // Throw exception if index not in list
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException(String.format("Index '%s' is out of bounds of list!", index));
+
+        // Iterate list to given index and return its element
+        Node<E> current = head;
+        for (int i = 0; i < index; i++)
+            current = current.next;
+        return current.element;
     }
 
-    // TODO: implement method
     /**
      * Return the index of the head matching element in
      * this list. Return - 1 if no match.
      */
     @Override
     public int indexOf(Object e) {
-        // Left as an exercise
-        return 0;
+        Node<E> current = head;
+        for (int i = 0; i < size; i++) {
+            if (e.equals(current.element)) // Check for match
+                return i;
+            current = current.next; // Go to next node
+        }
+        return -1; // error value -1 if no match
     }
 
-    // TODO: implement method
     /**
      * Return the index of the last matching element in
      * this list. Return - 1 if no match.
      */
     @Override
     public int lastIndexOf(E e) {
-        // Left as an exercise
-        return 0;
+        int lastIndex = -1;
+
+        // Iterate list to size and return index of last match
+        Node<E> current = head;
+        for (int i = 0; i < size; i++) {
+            if (e.equals(current.element)) // Check for match
+                lastIndex = i;
+            current = current.next;
+        }
+        return lastIndex; // -1 or index of the last match
     }
 
-    // TODO: implement method
     /**
      * Replace the element at the specified position
      * in this list with the specified element.
      */
     @Override
     public E set(int index, E e) {
-        // Left as an exercise
-        return null;
+        // Throw exception if index not in list
+        if (index < 0 || index >= size)
+            throw new IndexOutOfBoundsException(String.format("Index '%s' is out of bounds of list!", index));
+
+        // Iterate list to given index and change its element
+        Node<E> current = head;
+        for (int i = 0; i < index; i++)
+            current = current.next;
+        E cache = current.element;
+        current.element = e;
+        return cache; // return the previous element
     }
 
     /** Get node at specified index */
