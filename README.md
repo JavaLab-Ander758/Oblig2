@@ -7,9 +7,11 @@ Oblig 2 are assignments by group 7 in the subject ITE1901 / Programmering 2 :shi
     <li>&nbsp; Unicron2k / Mats-Erik Dalhaug Eriksen</li>
     <li>&nbsp; alex-joh &nbsp;&nbsp;&nbsp; / Alexander Johnsen</li>
 </ul>
-
+<br>
 
 **Task list:**
  - [x] Module 04
  - [ ] Module 05
+    - [x] Exercise 1
+    - [ ] Exercise 2
  - [ ] Module 06
