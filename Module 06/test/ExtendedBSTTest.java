@@ -46,4 +46,12 @@ class ExtendedBSTTest {
         assertThat(tree.getNumberOfNonLeaves(), equalTo(4));
     }
 
+    @Test
+    void getTheElementfromNode_ReturnnotNull(){
+        Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
+        ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
+        assertThat(tree.getNode(7), equalTo(2));
+
+    }
+
 }
