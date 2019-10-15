@@ -251,6 +251,28 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         return null;
     }
 
+    /**
+     * checking the element is in the tree, if yes return the node.
+     * @param element The element to look for
+     * @return The node for given element
+     */
+    TreeNode<E> getNode(E element) {
+        TreeNode<E> current = root; // Start from the root
+
+        while (current != null) {
+            if (element.equals(current.element)) {
+                return current; // Found element searched for
+            } else if (element.compareTo(current.element) < 0) {
+                current = current.left; // Search element is smaller than current node's element, go left
+            } else {
+                current = current.right; // Search element is bigger than current node's element, go right
+            }
+        }
+        return null;
+    }
+
+
+
 
 
 
