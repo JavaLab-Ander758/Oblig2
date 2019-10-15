@@ -54,14 +54,14 @@ class ExtendedBSTTest {
 
     //<editor-fold desc="Method test: TreeNode<E> getNode(E element)">
     @Test
-    void getTheElementfromNode_ReturnnotNull(){
+    void getNode_ReturnsNotNull(){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
         ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
         assertThat(tree.getNode(140).element, equalTo(140));
     }
 
     @Test
-    void getTheElementfromNode_ReturnNull(){
+    void getNode_ReturnsNull(){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
         ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
         assertThat(tree.getNode(68), is(IsNull.nullValue()));
