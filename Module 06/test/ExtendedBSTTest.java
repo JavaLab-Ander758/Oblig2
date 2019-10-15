@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.is;
 
 class ExtendedBSTTest {
 
+    //<editor-fold desc="Method test: int getNumberOfLeaves()">
     /**
      * Check that getNumberOfLeaves() returns 1 for tree with only 1 Node in total
      */
@@ -27,7 +28,9 @@ class ExtendedBSTTest {
         ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
         assertThat(tree.getNumberOfLeaves(), equalTo(2));
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Method test: int getNumberOfNonLeaves()">
     /**
      * Check that method getNumberOfNonLeaves() returns 0 for a tree with only 1 Node in total
      */
@@ -47,7 +50,9 @@ class ExtendedBSTTest {
         ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
         assertThat(tree.getNumberOfNonLeaves(), equalTo(4));
     }
+    //</editor-fold>
 
+    //<editor-fold desc="Method test: TreeNode<E> getNode(E element)">
     @Test
     void getTheElementfromNode_ReturnnotNull(){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
@@ -61,4 +66,5 @@ class ExtendedBSTTest {
         ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
         assertThat(tree.getNode(68), is(IsNull.nullValue()));
     }
+    //</editor-fold>
 }
