@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 @SuppressWarnings("Duplicates")
-public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
+public class ExtendedBSTParentExample<E extends Comparable<E>> implements Tree<E> {
     /** Root node for the tree. */
     private TreeNode<E> root;
 
@@ -10,7 +10,7 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
     private int size = 0;
 
     /** Create a default binary tree. */
-    ExtendedBST() {
+    ExtendedBSTParentExample() {
     }
 
     /**
@@ -18,7 +18,7 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
      *
      * @param objects Array of objects to use in creation of tree.
      */
-    ExtendedBST(E[] objects) {
+    ExtendedBSTParentExample(E[] objects) {
         for (E object : objects) {
             insert(object);
         }
@@ -215,58 +215,22 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Count and return number of leaves from the root
+     * Count and return number of leaf nodes in the tree.
      *
      * @return The number of leaf nodes in the tree
      */
-    int getNumberOfLeaves() {
-        return getNumberOfLeaves(root);
+    public int getNoOfLeaves() {
+        return getNoOfLeaves(root);
     }
 
-    /**
-     * Count and return number of leaves in given node
-     *
-     * @param node Node to count in
-     * @return The number of leaf nodes for given node
-     */
-    private int getNumberOfLeaves(TreeNode<E> node) {
+    public int getNoOfLeaves(TreeNode<E> node) {
         if (node == null)
             return 0;
-        if (isLeaf(node))
+        if (node.left == null && node.right == null)
             return 1;
-        return getNumberOfLeaves(node.left) + getNumberOfLeaves(node.right);
+        return getNoOfLeaves(node.left) + getNoOfLeaves(node.right);
     }
 
-    /**
-     * Count ant return number of non-leaf nodes in the tree from the root
-     * --> Count number of leaves and return the count minus the tree's size
-     *
-     * @return The number of non-leaf nodes in the tree
-     */
-    int getNumberOfNonLeaves() {
-        return getSize() - getNumberOfLeaves(root);
-    }
-
-    ArrayList<E> getPath() {
-        return null;
-    }
-
-
-
-
-
-
-
-
-    /**
-     * Checks whether given node is a leaf or not
-     *
-     * @param node The node to check
-     * @return Boolean state for check
-     */
-    private boolean isLeaf(TreeNode<E> node) {
-        return node.left == null && node.right == null;
-    }
 
 
 
@@ -410,7 +374,7 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         public void remove() {
             delete(list.get(current)); // Delete the current element
             list.clear(); // Clear the list
-            inOrder(); // Rebuildcurrent the list
+            inOrder(); // Rebuild the list
         }
     }
 
