@@ -1,7 +1,9 @@
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 
 class ExtendedBSTTest {
@@ -50,8 +52,13 @@ class ExtendedBSTTest {
     void getTheElementfromNode_ReturnnotNull(){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
         ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
-        assertThat(tree.getNode(7), equalTo(2));
-
+        assertThat(tree.getNode(140).element, equalTo(140));
     }
 
+    @Test
+    void getTheElementfromNode_ReturnNull(){
+        Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
+        ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
+        assertThat(tree.getNode(68), is(IsNull.nullValue()));
+    }
 }
