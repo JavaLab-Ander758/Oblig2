@@ -7,6 +7,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 class ExtendedBSTTest {
@@ -86,5 +87,28 @@ class ExtendedBSTTest {
         assertThat(tree.getPath(9999), equalTo(emptyArrayList));
     }
     //</editor-fold>
+
+    /**
+     * Check delete funconaliteten, remove from list and show the path.
+     */
+    @Test
+    void deleteOneIntegerInList_ReturnListWithPath(){
+        Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140, 142, 14221, 123, 77, 88};
+        ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
+        var correctPath = List.of(15, 30, 44, 140, 88, 77);
+        tree.delete(123);
+        assertThat(tree.getPath(77), is(correctPath));
+    }
+
+    /**
+     * Check delete funconaltiten, remove some not in the list and return false.
+     */
+    @Test
+    void deleteOneInteger_NotInList_ReturnFalse(){
+        Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140, 142, 14221, 123, 77, 88};
+        ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
+        assertThat(tree.delete(1222), is(false));
+
+    }
 
 }
