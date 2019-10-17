@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 @SuppressWarnings("Duplicates")
@@ -14,6 +15,7 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
     }
 
     /**
+     *
      * Create a binary tree from an array of objects.
      *
      * @param objects Array of objects to use in creation of tree.
@@ -46,12 +48,13 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
 
     public boolean insert(E element) {
         if (root == null) { // First element in Tree.
-            root = createNewNode(element);
+            root = createNewNode(element, null);
         } else {
             // Locate the parent node
             TreeNode<E> parent = null;
             TreeNode<E> current = root;
 
+            // TODO: Continue on here
             while (current != null) { // Go through the tree till we reach appropriate leaf node.
                 parent = current;
 
@@ -66,9 +69,9 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
 
             // Create the new node and attach it to the parent node
             if (element.compareTo(parent.element) < 0) {
-                parent.left = createNewNode(element);
+                parent.left = createNewNode(element, parent);
             } else {
-                parent.right = createNewNode(element);
+                parent.right = createNewNode(element, parent);
             }
         }
 
@@ -76,6 +79,7 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         return true; // Element inserted
     }
 
+    // TODO: not sure if parent is implemented here, test later
     public boolean delete(E element) {
         // Locate the node to be deleted and also locate its parent node
         TreeNode<E> parent = null;
@@ -247,12 +251,33 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         return getSize() - getNumberOfLeaves(root);
     }
 
+    // TODO: implement getPath() :-)
+    /**
+     * Return the path to element from root in the tree
+     *
+     * @param element Element to find path for
+     * @return Path to element as ArrayList
+     */
     ArrayList<E> getPath(E element) {
-        return null;
+        ArrayList<E> path = new ArrayList<>();
+        // Return empty array if tree is empty or if element not in tree
+        if (isEmpty() || getNode(element) == null)
+            return path;
+
+        // Element is in tree, find its path
+        TreeNode<E> node = getNode(element); // Go to node for given element
+        while (node != null) { // Traverse upwards in the tree to root
+            path.add(node.element);
+            node = node.parent;
+        }
+        // Reverse ArrayList and return it
+        Collections.reverse(path);
+        return path;
     }
 
     /**
      * checking the element is in the tree, if yes return the node.
+     *
      * @param element The element to look for
      * @return The node for given element
      */
@@ -306,8 +331,12 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
      *
      * @return A TreeNode with specified element inside it
      */
-    private TreeNode<E> createNewNode(E element) {
-        return new TreeNode<>(element);
+    private TreeNode<E> createNewNode(E element, TreeNode<E> parent) {
+        //return new TreeNode<>(element, parent);
+        TreeNode<E> node = new TreeNode<>(element);
+        node.parent = parent;
+        return node;
+
     }
 
     /**
@@ -382,6 +411,7 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         T element;
         TreeNode<T> left;
         TreeNode<T> right;
+        TreeNode<T> parent;
 
         TreeNode(T element) {
             this.element = element;
