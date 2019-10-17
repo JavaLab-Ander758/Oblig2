@@ -1,6 +1,5 @@
 import java.util.AbstractSequentialList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements MyList<E> {
@@ -47,8 +46,13 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
      */
     public void addFirst(E e) {
         Node<E> newHead = new Node<>(e); // Create a new node
-        newHead.next = head; // Link the new node with the head
-        head = newHead; // Set head to point to the new node
+        if(head!=null) {
+            newHead.next = head; // Link the new node with the head
+            head.previous = newHead; //Link old node to new node
+            head = newHead; // Set head to point to the new node
+        }
+        else { head = newHead; }
+
         size++; // Increase list size
 
         if (tail == null) { // The new head is the only node in list
@@ -62,14 +66,18 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
      */
     public void addLast(E e) {
         Node<E> newTail = new Node<>(e); // Create a new node
-        if (tail == null) { // The new tail is the only node in list
-            head = tail = newTail;
-        } else {
-            tail.next = newTail; // Now old tail node points to new tail
-            tail = tail.next; // Tail now points to the new tail node
-        }
 
-        size++; // Increase size
+        if(tail!=null){
+            tail.next = newTail; // Set tail to reference new tail
+            newTail.previous = tail; //set newTail.previous to reference old tail
+            tail = newTail; // Update the reference to tail with the newTail
+        } else { tail = newTail; }
+
+        size++; // Increase list size
+
+        if (head == null) { // The new tail is the only node in list
+            head = tail;
+        }
     }
 
     /**
@@ -84,10 +92,20 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
         } else if (index >= size) { // Index larger than size means that we set new tail
             addLast(e);
         } else { // Index is somewhere in the list
-            Node<E> current = getNodeAtIndex(--index);
-            Node<E> temp = current.next; // Create temporary node to keep next element in list
-            current.next = new Node<>(e); // Set current.next to new node
-            current.next.next = temp; // New elements next post to element after it in list
+
+            Node<E> newNode = new Node<>(e); // Create new node with element E
+            Node<E> currentNode = getNodeAtIndex(index);
+
+            // unless something very wrong has happened, this should never produce a NullPointerException,
+            // as we should always be located in [head+1,tail-1]
+            // noinspection ConstantConditions
+            Node<E> previousNode = currentNode.previous;
+
+            newNode.previous=previousNode; // Set newNode.previous to point to the new previous node
+            newNode.next=currentNode; // set newNode.next to point to the new next node.
+            previousNode.next=newNode; // Set previous.next to point to newNode
+            currentNode.previous=newNode; // Set currentNode.previous to point to newNode
+
             size++; // Increase size
         }
     }
@@ -97,16 +115,14 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
      * @return Object contained in removed node
      */
     public E removeFirst() {
-        if (isEmpty()) { // No elements in list
+        if (size == 0) { // No elements in list
             return null;
         } else {
-            Node<E> temp = head; // Keep hold of old head
+            E temp = head.element; // Keep hold of old element in head
             head = head.next; // Set head to point to next element in list
+            head.previous = null; // Ensure head.previous is null
             size--; // Decrease size
-            if (head == null) { // If there were only one element in list then tail needs to point to null
-                tail = null;
-            }
-            return temp.element; // Return deleted element
+            return temp; // Return deleted element
         }
     }
 
@@ -122,10 +138,9 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
             clear();
             return temp;
         } else {
-            Node<E> current = getNodeAtIndex(size - 2);
-            E temp = tail.element; // Keep current tail node element to return it
-            tail = current; // Set next to last element as tail
-            tail.next = null; // New tail needs to point to null instead of old tail
+            E temp = tail.element; // Keep newTail.element tail node element to return it
+            tail = tail.previous; // Set tail to previous node
+            tail.next = null; // Ensure tail.next is null
             size--; // Decrease size
             return temp; // Return old tail
         }
@@ -133,24 +148,35 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
 
     /**
      * Remove element at specified index in list
+     * May throw IndexOutOfBoundsException
      * @param index Index of element to remove from list
-     * @return The element that was removed
+     * @return The element that was removed or null
      */
     @Override
     public E remove(int index) {
-        checkIndex(index);
+        if(checkIndex(index)) {
+            if (index == 0)
+                return removeFirst();
+            else if (index == size - 1)
+                return removeLast();
+            else {
 
-        if (index == 0)
-            return removeFirst();
-        else if (index == size - 1)
-            return removeLast();
-        else {
-            Node<E> previous = getNodeAtIndex(--index);
-            Node<E> current = previous.next;
-            previous.next = current.next;
-            size--;
-            return current.element;
+                Node<E> current = getNodeAtIndex(index);
+
+                // unless something very wrong has happened, this should never produce a NullPointerException,
+                // as we should always be located in [head+1,tail-1]
+                // noinspection ConstantConditions
+                Node<E> next = current.next;
+                Node<E> previous = current.previous;
+
+                previous.next = next;
+                next.previous = previous;
+
+                size--;
+                return current.element;
+            }
         }
+        else return null;
     }
 
     /**
@@ -168,7 +194,7 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
             result.append(", ");
         }
 
-        result.deleteCharAt(result.length() - 1);
+        result.delete(result.length() - 2, result.length() - 1);
         result.append("]");
         return result.toString();
     }
@@ -188,29 +214,19 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
      * @return boolean
      */
     public boolean contains(Object e) {
-        if (size == 0)
-            return false; // List was empty
-
-        // Iterate list to find e in list
-        Node<E> current = head;
-        for (int i = 0; i < size; i++) {
-            if (e.equals(current.element))
-                return true;
-            current = current.next; // Go to next node
-        }
-        return false; // e was not found in list
+        return indexOf(e)!=-1;
     }
 
+    /**
+     * Returns the element at given index
+     * May throw IndexOutOfBoundsException
+     * @param index Index for element to return
+     * @return <E>
+     */
     @Override
     public E get(int index) {
-        // Throw out of bounds exception if index is not in list
-        checkIndex(index);
-
-        // Iterate list to given index and return its element
-        Node<E> current = head;
-        for (int i = 0; i < index; i++)
-            current = current.next;
-        return current.element;
+        Node<E> current = getNodeAtIndex(index);
+        return (current!=null?current.element:null);
     }
 
     /**
@@ -221,7 +237,7 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
     @Override
     public int indexOf(Object e) {
         // Return -1 if list is empty
-        if (isEmpty())
+        if (size == 0)
             return -1;
 
         // Iterate list and return any index of match
@@ -249,11 +265,11 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
 
         // Iterate list backwards and return any index of match
         int lastIndex = -1;
-        Node<E> current = head;
-        for (int i = 0; i < size; i++) {
+        Node<E> current = tail;
+        for (int i = size; i > 0; i--) {
             if (e.equals(current.element)) // Check for match
                 lastIndex = i;
-            current = current.next;
+            current = current.previous;
         }
 
         // Return -1 if no match
@@ -261,84 +277,75 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
     }
 
     /**
-     * Set/replace element in list at given index
+     * Set/replace element in list at given index.
+     * May throw IndexOutOfBoundsException
      * @param index Index to place element in list
      * @param e Element to add in list
-     * @return Element that was removed
+     * @return Element that was removed or null
      */
     public E set(int index, E e) {
-        // Throw out of bounds exception if index is not in list
-        checkIndex(index);
-
-        // Iterate list to given index and change its element
-        Node<E> current = head;
-        for (int i = 0; i < index; i++)
-            current = current.next;
-        E cache = current.element;
-        current.element = e;
-        return cache; // Return the previous element
+        // Fetch node currently at index
+        Node<E> current = getNodeAtIndex(index);
+        if(current != null) {
+            E cache = current.element;
+            current.element = e;
+            return cache; // Return the previous element
+        }
+        else return null;
     }
 
     /**
      * Get node at specified index
+     * May throw IndexOutOfBoundsException
      * @param index Index of node to return in list
-     * @return Node at given index in list
+     * @return Node at given index in list or null
      */
     private Node<E> getNodeAtIndex(int index) {
-        Node<E> current = head;
-        for (int i = 0; i < index; i++)
-            current = current.next;
-        return current;
+        if (checkIndex(index)) {
+            //TODO Optimize code by deciding to traverse from head or tail, ~halves traversal-time
+            Node<E> current = head; // Start traversal from current head
+            for (int i = 0; i < index; i++)
+                current = current.next;
+            return current;
+        }
+        else return null;
     }
 
     /**
      * Check if specified index is valid
      * @param index Index to check in list
+     * @return True if valid, throws IndexOutOfBoundsException if fails
      */
-    private void checkIndex(int index) {
-        if (index < 0 || index >= size)
+    private boolean checkIndex(int index) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(String.format("Index '%s' is out of bounds of list!", index));
+        }
+        else return true;
     }
 
-
-    @Override
-    public Iterator<E> iterator() {
-        return new TwoWayIterator();
-    }
-
+    /**
+     * Creates a new listIterator of type TwoWayListIterator,
+     * TwoWayListIterator extends listIterator.
+     * @return TwoWayListIterator
+     */
     @Override
     public ListIterator<E> listIterator() {
         return new TwoWayListIterator();
     }
 
+    /**
+     * Creates a new listIterator of type TwoWayListIterator,
+     * located the specified index
+     * TwoWayListIterator extends listIterator.
+     * @param index Index which the list will initially point to
+     * @return TwoWayListIterator
+     */
     @Override
     public ListIterator<E> listIterator(int index) {
         return new TwoWayListIterator(index);
     }
 
-    private class TwoWayIterator implements Iterator<E> {
-        private Node<E> current = head;
-        private int index = 0;
-
-        @Override
-        public boolean hasNext() {
-            return current != null;
-        }
-
-        @Override
-        public E next() {
-            E e = current.element;
-            current = current.next;
-            index++;
-            return e;
-        }
-    }
-
-
-
-
-
-
+    //TODO Add javadoc-comments for TwoWayListIterator
     private class TwoWayListIterator implements ListIterator<E> {
         private Node<E> current = head;
         private int index = 0;
@@ -354,55 +361,71 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
 
         @Override
         public boolean hasNext() {
-            return current != null;
+            return (current.next != null);
         }
 
         @Override
         public E next() {
-            E e = current.element;
-            current = current.next;
-            index++;
-            return e;
+            if (hasNext()) {
+                E e = current.element;
+                current = current.next;
+                index++;
+                return e;
+            }
+            else return null;
         }
 
         @Override
         public boolean hasPrevious() {
-            return current != null;
+            return (current.previous != null);
         }
 
         @Override
         public E previous() {
-            E e = current.element;
-            current = current.previous;
-            index--;
-            return e;
+            if (hasPrevious()) {
+                E e = current.element;
+                current = current.previous;
+                index--;
+                return e;
+            }
+            else return null;
         }
 
         @Override
         public int nextIndex() {
-            return index;
+            if (hasNext()) {
+                return index+1;
+            }
+            return -1;
         }
 
         @Override
         public int previousIndex() {
             if (hasPrevious())
-                return index;
+                return index-1;
             return -1;
         }
 
+
+
+        //Not necessary
+
+        //FIXME TwoWayListIterator::remove() NOT IMPLEMENTED
         @Override
         public void remove() {
-
+            throw new UnsupportedOperationException();
         }
 
+        //FIXME TwoWayListIterator::set() NOT IMPLEMENTED
         @Override
         public void set(E e) {
-
+            throw new UnsupportedOperationException();
         }
 
+        //FIXME TwoWayListIterator::add() NOT IMPLEMENTED
         @Override
         public void add(E e) {
-
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -410,6 +433,8 @@ public class MyTwoWayLinkedList<E> extends AbstractSequentialList<E> implements 
         E element;
         Node<E> next;
         Node<E> previous;
+
+        public Node(){}
 
         public Node (E element) {
             this.element = element;
