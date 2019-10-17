@@ -79,7 +79,6 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         return true; // Element inserted
     }
 
-    // TODO: not sure if parent is implemented here, test later
     public boolean delete(E element) {
         // Locate the node to be deleted and also locate its parent node
         TreeNode<E> parent = null;
@@ -251,7 +250,6 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         return getSize() - getNumberOfLeaves(root);
     }
 
-    // TODO: implement getPath() :-)
     /**
      * Return the path to element from root in the tree
      *
@@ -295,15 +293,6 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         }
         return null;
     }
-
-
-
-
-
-
-
-
-
 
     /**
      * Checks whether given node is a leaf or not

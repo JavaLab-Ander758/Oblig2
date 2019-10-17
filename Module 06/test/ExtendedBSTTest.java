@@ -49,8 +49,7 @@ class ExtendedBSTTest {
     //</editor-fold>
 
     //<editor-fold desc="Method test: TreeNode<E> getNode(E element)">
-
-    /** Check that method getNode() returns given node from given element search */
+    /** Check that method getNode(E element) returns given node from given element search */
     @Test
     void getNode_ReturnsNodeInTheTree (){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
@@ -58,7 +57,7 @@ class ExtendedBSTTest {
         assertThat(tree.getNode(140).element, equalTo(140));
     }
 
-    /** Check that method getNode() returns null if node for given element is not in tree */
+    /** Check that method getNode(E element) returns null if node for given element is not in tree */
     @Test
     void getNode_ReturnsNull (){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140};
@@ -67,9 +66,8 @@ class ExtendedBSTTest {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Method test: ArrayList<E> getPath()">
-
-    /** Check that method getPath() returns path as ArrayList to given element in tree */
+    //<editor-fold desc="Method test: ArrayList<E> getPath(E element)">
+    /** Check that method getPath(E element) returns path as ArrayList to given element in tree */
     @Test
     void getPath_ReturnsArrayListOfPathToElementInTree() {
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140, 142, 14221, 123, 77, 88};
@@ -78,7 +76,7 @@ class ExtendedBSTTest {
         assertThat(tree.getPath(88), equalTo(correctPath));
     }
 
-    /** Check that method getPath() returns empty ArrayList if element is not in tree */
+    /** Check that method getPath(E element) returns empty ArrayList if element is not in tree */
     @Test
     void getPath_ReturnsEmptyArrayListIfElementIsNotInTree() {
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140, 142, 14221, 123, 77, 88};
@@ -88,9 +86,8 @@ class ExtendedBSTTest {
     }
     //</editor-fold>
 
-    /**
-     * Check delete funconaliteten, remove from list and show the path.
-     */
+    //<editor-fold desc="Additional method tests for testing parent references">
+    /** Check delete functionality, remove from list and show the path */
     @Test
     void deleteOneIntegerInList_ReturnListWithPath(){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140, 142, 14221, 123, 77, 88};
@@ -100,15 +97,33 @@ class ExtendedBSTTest {
         assertThat(tree.getPath(77), is(correctPath));
     }
 
-    /**
-     * Check delete funconaltiten, remove some not in the list and return false.
-     */
+    /** Check delete functionality, remove some not in the list and return false */
     @Test
     void deleteOneInteger_NotInList_ReturnFalse(){
         Integer[] testIntegers = {15, 30, 1, 7, 8, 44, 140, 142, 14221, 123, 77, 88};
         ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
         assertThat(tree.delete(1222), is(false));
-
     }
 
+    /** Check that method insert(E element) works with parent reference */
+    @Test
+    void insert_InsertsCorrectlyIntoTree() {
+        ExtendedBST<Integer> tree = new ExtendedBST<>();
+        tree.insert(1);
+        tree.insert(2);
+        tree.insert(3);
+        assertThat(tree.getNode(3).parent.element, equalTo(2));
+    }
+
+    /** Check that method delete(E element) deletes and changes any parent references */
+    @Test
+    void delete_DeletesCorrectly() {
+        Integer[] testIntegers = {1, 5, 7, 4, 3};
+        ExtendedBST<Integer> tree = new ExtendedBST<>(testIntegers);
+        tree.delete(5);
+        // 4 is now the right leaf for 1 (root)
+        // Check whether 1 is the parent of 4
+        assertThat(tree.getNode(4).parent.element, equalTo(1));
+    }
+    //</editor-fold>
 }
