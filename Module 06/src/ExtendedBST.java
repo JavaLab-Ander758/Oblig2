@@ -247,7 +247,7 @@ public class ExtendedBST<E extends Comparable<E>> implements Tree<E> {
         return getSize() - getNumberOfLeaves(root);
     }
 
-    ArrayList<E> getPath() {
+    ArrayList<E> getPath(E element) {
         return null;
     }
 
