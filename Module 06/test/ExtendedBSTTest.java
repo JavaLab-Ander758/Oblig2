@@ -1,17 +1,13 @@
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 
 class ExtendedBSTTest {
-
     //<editor-fold desc="Method test: int getNumberOfLeaves()">
     /** Check that getNumberOfLeaves() returns 1 for tree with only 1 Node in total */
     @Test
